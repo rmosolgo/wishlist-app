@@ -20,7 +20,10 @@
         <%= yield %>
       </div>
       <div class="footer container">
-        <p class="row pt-sm-3"><small><%= link_to "Make your own list", root_path %></small></p>
+        <p class="row pt-sm-3">
+          <small><%= link_to "Make your own list", root_path %></small>
+          <small class="ml-auto"><%= link_to "Source code", "https://github.com/rmosolgo/wishlist-app" %></small>
+        </p>
       </div>
     </div>
   </body>

@@ -10,11 +10,9 @@ class ChecksController < ApplicationController
   private
 
   def set_checked(checked_value)
-    @item = Item.joins(:list).where(
-      "lists.share_secret" => params[:share_id],
-      "id" => params[:item_id]
-    ).first
-    @item.update!(checked: checked_value)
-    redirect_to(share_path(params[:share_id]))
+    list = List.find_by(share_secret: params[:share_id])
+    item = list.items.find_by(id: params[:item_id])
+    item.update!(checked: checked_value)
+    redirect_to(share_vanity_path(id: params[:share_id], title: list.title.parameterize))
   end
 end

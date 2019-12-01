@@ -5,7 +5,7 @@ class ItemsController < ApplicationController
     item = list.items.build(item_params)
     item.save!
     list.touch
-    redirect_to(master_path(list.master_secret))
+    redirect_to(master_vanity_path(id: list.master_secret, title: list.title.parameterize))
   end
 
   def update
@@ -14,7 +14,7 @@ class ItemsController < ApplicationController
     item_params = params.require(:item).permit(:title)
     item.update!(item_params)
     list.touch
-    redirect_to(master_path(list.master_secret))
+    redirect_to(master_vanity_path(id: list.master_secret, title: list.title.parameterize))
   end
 
   def destroy
@@ -22,6 +22,6 @@ class ItemsController < ApplicationController
     item = list.items.find_by(id: params[:id])
     item.destroy!
     list.touch
-    redirect_to(master_path(list.master_secret))
+    redirect_to(master_vanity_path(id: list.master_secret, title: list.title.parameterize))
   end
 end

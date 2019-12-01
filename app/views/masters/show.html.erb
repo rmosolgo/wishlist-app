@@ -26,7 +26,7 @@
   <% end %>
   <li class="list-group-item">
     <%= form_for(@list.items.build, url: master_items_path(master_id: @list.master_secret), html: { class: "form-inline" }) do |f| %>
-      <%= f.text_field :title, class: "form-control" %>
+      <%= f.text_field :title, class: "form-control", autofocus: true %>
       <%= f.submit "Add Item", class: "btn ml-sm-3 btn-outline-primary" %>
     <% end %>
   </li>
@@ -34,9 +34,22 @@
 
 <ul class="list-group row mt-sm-3">
   <li class="list-group-item">
+    <strong>Master link:</strong>
+    <br>
+    <% master_link = master_vanity_url(id: @list.master_secret, title: @list.title.parameterize) %>
+    <a href="<%= master_link %>"><code><%= master_link %></code></a>
+    <br>
+    <em>Anyone</em> with this link can manage items or delete the list. (This link is probably just for you.)
+  <br>
+    <%= link_to "Copy this link", "#", onclick: "event.preventDefault(); copyToClipboard('#{master_link}'); this.text = 'Copied! Now save it somewhere.'" %>
+
+  </li>
+
+  <li class="list-group-item">
     <strong>Preview link:</strong>
     <br>
-    <a href="<%= preview_url(id: @list.share_secret) %>"><code><%= preview_url(id: @list.share_secret) %></code></a>
+    <% preview_link = preview_vanity_url(id: @list.share_secret, title: @list.title.parameterize) %>
+    <a href="<%= preview_link %>"><code><%= preview_link %></code></a>
     <br>
     This is what your list looks like to others (but this doesn't tell you if anyone checked items!)
   </li>
@@ -44,7 +57,7 @@
   <li class="list-group-item">
     <strong>Share link:</strong>
     <br>
-    <% share_link = share_url(id: @list.share_secret)%>
+    <% share_link = share_vanity_url(id: @list.share_secret, title: @list.title.parameterize)%>
     <code><%= share_link %></code>
     <br>
     Anyone with this link may check and uncheck items.

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Wishlist</title>
+    <title>Wishlist<%= yield(:title).blank? ? "" : " | #{yield(:title)}" %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -10,6 +10,18 @@
   </head>
 
   <body>
-    <%= yield %>
+    <div class="main-container">
+      <div class="main-content container">
+        <% flash.each do |key, text| %>
+          <div class="row mt-sm-3 alert alert-<%= key %>">
+            <%= text %>
+          </div>
+        <% end %>
+        <%= yield %>
+      </div>
+      <div class="footer container">
+        <p class="row pt-sm-3"><small><%= link_to "Make your own list", root_path %></small></p>
+      </div>
+    </div>
   </body>
 </html>

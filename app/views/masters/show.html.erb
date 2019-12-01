@@ -1,0 +1,60 @@
+<% content_for :title, "Manage #{@list.title}" %>
+
+<%= form_for(@list, method: :patch, url: master_path(id: @list.master_secret), html: { class: "row form-inline mt-sm-3" }) do |f| %>
+  <%= f.text_field :title, class: "form-control" %>
+  <%= f.submit "Update title", class: "ml-sm-3 btn btn-outline-primary" %>
+<% end %>
+
+
+
+<ul class="row mt-sm-3 list-group">
+  <li class="list-group-item">
+    <strong>Manage Items</strong>
+    <br>
+    <span class="text-muted"><em>If you shared this list, some items may have been checked already.</em></span>
+  </li>
+  <% @list.items.each do |item| %>
+    <li class="list-group-item">
+      <span class="item-option"><%= auto_link(item.title) %></span>
+      <%= form_for(item, url: master_item_path(master_id: @list.master_secret, id: item.id), method: :patch, html: { class: "item-option item-option-hidden form-inline" }) do |f| %>
+        <%= f.text_field :title, class: "form-control" %>
+        <%= f.submit "Update", class: "btn ml-sm-3 btn-outline-primary" %>
+      <% end %>
+      <%= link_to "✎", "#", onclick: "event.preventDefault(); toggleItemEdit(this.parentNode)", class: "btn btn-sm btn-outline-primary float-right" %>
+      <%= link_to "x", master_item_path(master_id: @list.master_secret, id: item.id), method: :delete, class: "btn btn-sm btn-outline-danger float-right mx-sm-3", data: { confirm: "Delete \"#{item.title}\"?" } %>
+    </li>
+  <% end %>
+  <li class="list-group-item">
+    <%= form_for(@list.items.build, url: master_items_path(master_id: @list.master_secret), html: { class: "form-inline" }) do |f| %>
+      <%= f.text_field :title, class: "form-control" %>
+      <%= f.submit "Add Item", class: "btn ml-sm-3 btn-outline-primary" %>
+    <% end %>
+  </li>
+</ul>
+
+<ul class="list-group row mt-sm-3">
+  <li class="list-group-item">
+    <strong>Preview link:</strong>
+    <br>
+    <a href="<%= preview_url(id: @list.share_secret) %>"><code><%= preview_url(id: @list.share_secret) %></code></a>
+    <br>
+    This is what your list looks like to others (but this doesn't tell you if anyone checked items!)
+  </li>
+
+  <li class="list-group-item">
+    <strong>Share link:</strong>
+    <br>
+    <% share_link = share_url(id: @list.share_secret)%>
+    <code><%= share_link %></code>
+    <br>
+    Anyone with this link may check and uncheck items.
+    <br>
+    <%= link_to "Copy this link", "#", onclick: "event.preventDefault(); copyToClipboard('#{share_link}'); this.text = 'Copied! Now send it to someone.'" %>
+    <br>
+    <em>If you visit that link, it will ruin the surprise 😉</em>
+  </li>
+
+  <li class="list-group-item">
+    <%= link_to "Delete \"#{@list.title}\" forever", master_path(id: @list.master_secret), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure you want to delete this FOREVER?" } %>
+  </li>
+</ul>

@@ -1,0 +1,25 @@
+@import "bootstrap";
+
+html, body { height: 100%; margin: 0; }
+
+.item-option {
+  display: inline;
+}
+.item-option.item-option-hidden {
+  display: none;
+}
+
+
+.main-container {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex-grow: 1;
+}
+
+.footer {
+  flex-shrink: 0;
+}

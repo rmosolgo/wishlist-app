@@ -8,10 +8,19 @@ require("turbolinks").start()
 require("@rails/activestorage").start()
 require("channels")
 
+window.toggleItemEdit = function(itemNode) {
+  console.log(itemNode)
+  itemNode.querySelectorAll(".item-option").forEach(function(itemOption) {
+    console.log(itemOption)
+    itemOption.classList.toggle("item-option-hidden")
+  })
+}
 
-// Uncomment to copy all static images under ../images to the output folder and reference
-// them with the image_pack_tag helper in views (e.g <%= image_pack_tag 'rails.png' %>)
-// or the `imagePath` JavaScript helper below.
-//
-// const images = require.context('../images', true)
-// const imagePath = (name) => images(name, true)
+window.copyToClipboard = str => {
+  const el = document.createElement('textarea');
+  el.value = str;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+};

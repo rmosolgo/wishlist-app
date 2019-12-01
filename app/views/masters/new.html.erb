@@ -1,0 +1,20 @@
+<% content_for :title, "Make a new list" %>
+
+<div class="row">
+  <p>
+    Create a wishlist to share with others.
+  </p>
+
+  <p>
+    You get a <strong>master link</strong> for managing items,
+    and you give the <strong>share link</strong> to others where they can
+    (secretly) check them off.
+  </p>
+</div>
+
+<%= form_for(@list, url: masters_path, html: { class: "row form-inline" }) do |f| %>
+  <div class="form-group mr-sm-3">
+    <%= f.text_field :title, required: true, placeholder: "Your list's title", class: "form-control" %>
+  </div>
+  <%= f.submit "Make a list!", class: "btn btn-outline-primary" %>
+<% end %>

@@ -1,3 +1,15 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  root to: "masters#new"
+
+  resources :masters, only: [:new, :create, :show, :update, :destroy] do
+    resources :items, only: [:create, :destroy, :update]
+  end
+
+  resources :previews, only: [:show]
+
+  resources :shares, only: [:show] do
+    resources :items, only: [] do
+      resource :check, only: [:create, :destroy]
+    end
+  end
 end

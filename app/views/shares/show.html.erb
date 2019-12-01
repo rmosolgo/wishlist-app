@@ -1,0 +1,28 @@
+<% if @list.nil? %>
+  <p>
+    No list here! It might have been deleted by its owner.
+  </p>
+<% else %>
+  <%= content_for :title, @preview ? "PREVIEW #{@list.title}" : @list.title %>
+  <h3 class="row mt-sm-3"><%= @list.title %></h3>
+  <ul class="list-group row mt-sm-3">
+    <% item_order = @preview ? { created_at: :asc } : { checked: :asc, created_at: :asc } %>
+    <% @list.items.order(item_order).each do |item| %>
+      <li class="list-group-item">
+        <% if @preview %>
+          <%= check_box_tag "checked", "no_value", false, disabled: true %>
+        <% else %>
+          <% form_method = item.checked? ? :delete : :post %>
+          <%= form_for(item, method: form_method, url: share_item_check_path(share_id: @list.share_secret, item_id: item.id), html: { style: "display: inline;" }) do |f| %>
+            <% f.check_box :checked, onclick: "this.parentNode.submit()"%>
+          <% end %>
+        <% end %>
+        <%= auto_link(item.title) %>
+      </li>
+    <% end %>
+  </ul>
+
+  <p class="row mt-3 text-muted">
+    Last updated by owner: <%= @list.updated_at.strftime("%B %-d, %Y") %>
+  </p>
+<% end %>

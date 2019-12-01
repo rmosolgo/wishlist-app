@@ -1,11 +1,13 @@
 <% content_for :title, "Manage #{@list.title}" %>
 
-<%= form_for(@list, method: :patch, url: master_path(id: @list.master_secret), html: { class: "row form-inline mt-sm-3" }) do |f| %>
-  <%= f.text_field :title, class: "form-control" %>
-  <%= f.submit "Update title", class: "ml-sm-3 btn btn-outline-primary" %>
+<%= form_for(@list, method: :patch, url: master_path(id: @list.master_secret), html: { class: "row mt-sm-3" }) do |f| %>
+  <div class="col-10 px-0">
+    <%= f.text_field :title, class: "form-control" %>
+  </div>
+  <div class="col-2 px-0">
+    <%= f.submit "Update title", class: "ml-sm-3 btn btn-outline-primary" %>
+  </div>
 <% end %>
-
-
 
 <ul class="row mt-sm-3 list-group">
   <li class="list-group-item">
@@ -14,30 +16,42 @@
     <span class="text-muted"><em>If you shared this list, some items may have been checked already.</em></span>
   </li>
   <% @list.items.each do |item| %>
-    <li class="list-group-item">
-      <span class="item-option"><%= auto_link(item.title) %></span>
-      <%= form_for(item, url: master_item_path(master_id: @list.master_secret, id: item.id), method: :patch, html: { class: "item-option item-option-hidden form-inline" }) do |f| %>
-        <%= f.text_field :title, class: "form-control" %>
-        <%= f.submit "Update", class: "btn ml-sm-3 btn-outline-primary" %>
-      <% end %>
-      <%= link_to "✎", "#", onclick: "event.preventDefault(); toggleItemEdit(this.parentNode)", class: "btn btn-sm btn-outline-primary float-right" %>
-      <%= link_to "x", master_item_path(master_id: @list.master_secret, id: item.id), method: :delete, class: "btn btn-sm btn-outline-danger float-right mx-sm-3", data: { confirm: "Delete \"#{item.title}\"?" } %>
+    <li class="list-group-item col-12">
+      <div class="row">
+        <span class="item-option col-10"><%= auto_link(item.title) %></span>
+        <%= form_for(item, url: master_item_path(master_id: @list.master_secret, id: item.id), method: :patch, html: { class: "item-option item-option-hidden col-10" }) do |f| %>
+          <div class="row">
+            <div class="col-10 pl-1 pr-0">
+              <%= f.text_field :title, class: "form-control" %>
+            </div>
+            <div class="col-2 px-0">
+              <%= f.submit "Update", class: "btn ml-sm-3 btn-outline-primary" %>
+            </div>
+          </div>
+        <% end %>
+        <div class="col-2">
+          <%= link_to "✎", "#", onclick: "event.preventDefault(); toggleItemEdit(this.parentNode.parentNode)", class: "btn btn-sm btn-outline-primary float-right" %>
+          <%= link_to "x", master_item_path(master_id: @list.master_secret, id: item.id), method: :delete, class: "btn btn-sm btn-outline-danger float-right mx-sm-3", data: { confirm: "Delete \"#{item.title}\"?" } %>
+        </div>
+      </div>
     </li>
   <% end %>
   <li class="list-group-item">
-    <%= form_for(@list.items.build, url: master_items_path(master_id: @list.master_secret), html: { class: "form-inline" }) do |f| %>
-      <%= f.text_field :title, class: "form-control", autofocus: true %>
-      <%= f.submit "Add Item", class: "btn ml-sm-3 btn-outline-primary" %>
+    <%= form_for(@list.items.build, url: master_items_path(master_id: @list.master_secret), html: { class: "row" }) do |f| %>
+      <div class="col-10 pr-0 pl-1">
+        <%= f.text_field :title, class: "form-control", autofocus: true %>
+      </div>
+      <div class="col-2 px-0">
+        <%= f.submit "Add Item", class: "btn ml-sm-3 btn-outline-primary" %>
+      </div>
     <% end %>
   </li>
 </ul>
 
 <ul class="list-group row mt-sm-3">
   <li class="list-group-item">
-    <strong>Master link:</strong>
-    <br>
     <% master_link = master_vanity_url(id: @list.master_secret, title: @list.title.parameterize) %>
-    <a href="<%= master_link %>"><code><%= master_link %></code></a>
+    <strong>Master link:</strong> <a href="<%= master_link %>"><code><%= master_link %></code></a>
     <br>
     <em>Anyone</em> with this link can manage items or delete the list. (This link is probably just for you.)
   <br>
@@ -46,19 +60,15 @@
   </li>
 
   <li class="list-group-item">
-    <strong>Preview link:</strong>
-    <br>
     <% preview_link = preview_vanity_url(id: @list.share_secret, title: @list.title.parameterize) %>
-    <a href="<%= preview_link %>"><code><%= preview_link %></code></a>
+    <strong>Preview link:</strong> <a href="<%= preview_link %>"><code><%= preview_link %></code></a>
     <br>
     This is what your list looks like to others (but this doesn't tell you if anyone checked items!)
   </li>
 
   <li class="list-group-item">
-    <strong>Share link:</strong>
-    <br>
     <% share_link = share_vanity_url(id: @list.share_secret, title: @list.title.parameterize)%>
-    <code><%= share_link %></code>
+    <strong>Share link:</strong> <code><%= share_link %></code>
     <br>
     Anyone with this link may check and uncheck items.
     <br>

@@ -7,7 +7,7 @@ class MastersController < ApplicationController
     list_params = params.require(:list).permit(:title)
     # TODO handle errors
     list = List.create!(list_params)
-    flash[:success] = "Welcome to your new list! Don't loose the link to this page"
+    flash[:success] = "Welcome to your new list! Don't lose the link to this page."
     redirect_to(master_vanity_path(id: list.master_secret, title: list.title.parameterize))
   end
 

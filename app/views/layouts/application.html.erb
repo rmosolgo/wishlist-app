@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Wishlist<%= yield(:title).blank? ? "" : " | #{yield(:title)}" %></title>
+    <title>Wishlist<%= yield(:title).blank? ? "" : sanitize(" | #{yield(:title)}") %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
